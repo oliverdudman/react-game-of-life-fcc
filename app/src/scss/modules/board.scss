@@ -1,0 +1,38 @@
+.board {
+  padding: 20px;
+  background-color: $board-base-color;
+
+  &--small {
+    width: $board-width-small;
+  }
+
+  &--medium {
+    width: $board-width-medium;
+  }
+
+  &--large {
+    width: $board-width-large;
+  }
+
+  &__cell {
+    display: inline-block;
+    width: $cell-size;
+    height: $cell-size;
+    background-color: black;
+    margin: $cell-margin;
+
+    &.active {
+      background-color: orange;
+    }
+
+    &.active--old {
+      background-color: red;
+    }
+  }
+
+  &__row {
+    height: $cell-size + 2 * $cell-margin;
+    padding: 0px;
+    margin: 0px;
+  }
+}

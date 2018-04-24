@@ -1,0 +1,11 @@
+$font-color: white;
+
+$board-base-color: grey;
+
+//board sizes
+$cell-size: 10px;
+$cell-margin: 1px;
+$board-width-small: 50 * ($cell-size + $cell-margin * 2);
+$board-width-medium: 70 * ($cell-size + $cell-margin * 2);
+$board-width-large: 100 * ($cell-size + $cell-margin * 2);
+$board-height: 30 * $cell-size;

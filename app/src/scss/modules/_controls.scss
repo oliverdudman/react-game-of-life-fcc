@@ -1,0 +1,26 @@
+.ctrls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: $board-base-color;
+
+  &--medium {
+    width: 450px;
+  }
+
+  &--large {
+    width: 600px;
+  }
+
+}
+
+.ctrls__label {
+  width: 120px;
+
+  margin: 0px;
+
+  font-size: 1.2em;
+  text-align: center;
+  color: $font-color;
+}
