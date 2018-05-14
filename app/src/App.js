@@ -12,44 +12,57 @@ function Button(props) {
 }
 
 class Board extends React.Component {
-  render() {
-    let width = this.props.BOARDSIZES[this.props.size].w;
-    let height = this.props.BOARDSIZES[this.props.size].h;
-    let classes = "board";
+  constructor(props) {
+    super(props);
 
-    if (this.props.size === "Large") {
-      classes += " board--large";
-    } else if (this.props.size === "Medium") {
-      classes += " board--medium";
-    } else {
-      classes += " board--small";
-    }
+    this.cellSize = 10;
+    this.cellMargin = 2;
 
-    let grid = [];
-    for (let j = 0; j < height; j++) {
-      let row = [];
-      for (let i = 0; i < width; i++) {
-        let classes = "board__cell"
-        if (this.props.activeCells[j][i] === 1) {
-          classes += " active";
-        } else if (this.props.activeCells[j][i] === 2) {
-          classes += " active--old";
+    this.drawSquare = this.drawSquare.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentDidUpdate() {
+    console.log("updated");
+    let drawSquare = this.drawSquare;
+    let c = document.getElementById("board-canvas");
+    let ctx = c.getContext("2d");
+    let canvasWidth = this.props.BOARDSIZES[this.props.size].w * (this.cellSize + this.cellMargin);
+    let canvasHeight = this.props.BOARDSIZES[this.props.size].h * (this.cellSize + this.cellMargin);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    let cells = this.props.activeCells;
+    cells.forEach(function(row, rowNum) {
+      row.forEach(function(cell, colNum) {
+        if (cell > 0) {
+          drawSquare(colNum, rowNum, ctx, cell);
         }
-        row.push(
-          <div className={classes} key={i} onClick={() => this.props.handleCellClick({i: i, j: j})}></div>
-        )
-      }
-      grid.push(
-        <div className="board__row" key={j}>
-          {row}
-        </div>
-      );
-    }
+      });
+    });
+
+  }
+
+  drawSquare(i, j, ctx, cellValue) {
+    let positionX = i * (this.cellSize + this.cellMargin);
+    let positionY = j * (this.cellSize + this.cellMargin);
+    let cellColor = cellValue === 1 ? "orange" : "red";
+    ctx.fillStyle = cellColor;
+    ctx.fillRect(positionX, positionY, this.cellSize, this.cellSize);
+  }
+
+  handleClick(e) {
+    let i = Math.floor(e.nativeEvent.offsetX / (this.cellSize + this.cellMargin));
+    let j = Math.floor(e.nativeEvent.offsetY / (this.cellSize + this.cellMargin));
+    this.props.handleCellClick({i: i, j: j});
+  }
+
+  render() {
+    console.log("rendered");
+    let canvasWidth = this.props.BOARDSIZES[this.props.size].w * (this.cellSize + this.cellMargin);
+    let canvasHeight = this.props.BOARDSIZES[this.props.size].h * (this.cellSize + this.cellMargin);
 
     return (
-      <div className={classes}>
-        {grid}
-      </div>
+      <canvas id="board-canvas" onClick={this.handleClick} width={canvasWidth} height={canvasHeight} style={{backgroundColor: "grey", padding: "2px"}}></canvas>
     )
   }
 }
@@ -96,9 +109,9 @@ class App extends Component {
     };
 
     this.SPEEDS = {
-      slow: {time: 1500, text: "Slow"},
-      medium: {time: 600, text: "Medium"},
-      fast: {time: 50, text: "Fast"}
+      slow: {time: 800, text: "Slow"},
+      medium: {time: 400, text: "Medium"},
+      fast: {time: 10, text: "Fast"}
     };
 
     this.state = {
