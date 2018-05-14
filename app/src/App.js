@@ -138,12 +138,12 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.runInterval);
+    clearInterval(this.runInterval);
   }
 
   runLifecycle(speed) {
-    clearInterval(this.state.runInterval);
-    let interval = setInterval(() => {
+    clearInterval(this.runInterval);
+    this.runInterval = setInterval(() => {
       let activeCells = this.calculateCellStatus(this.state.activeCells, this.BOARDSIZES[this.state.size].h, this.BOARDSIZES[this.state.size].w);
       let generations = this.state.generations;
       // look to see if there are any active cells
@@ -153,14 +153,14 @@ class App extends Component {
       });
       // clear timer if no active cells
       if (activeCellsLeft === -1) {
-        clearInterval(this.state.runInterval);
+        clearInterval(this.runInterval);
         this.setState({runInterval: null});
       } else {
         generations++;
       }
       this.setState({activeCells: activeCells, generations: generations});
     }, speed.time);
-    this.setState({runInterval: interval, speed: speed});
+    this.setState({speed: speed});
   }
 
   calculateCellStatus(prevCells, height, width) {
@@ -222,7 +222,7 @@ class App extends Component {
   }
 
   handleChangeSize(size) {
-    clearInterval(this.state.runInterval);//clear running lifecycle
+    clearInterval(this.runInterval);//clear running lifecycle
     let gridSize = size.target.innerHTML;
 
     //update size if different from current size
@@ -236,7 +236,7 @@ class App extends Component {
 
   handleChangeSpeed(e) {
     let speed = e.target.innerHTML.toLowerCase();
-    if (this.state.runInterval) {
+    if (this.runInterval) {
       this.runLifecycle(this.SPEEDS[speed]);
     } else {
       this.setState({speed: this.SPEEDS[speed], generations: 0});
@@ -251,10 +251,10 @@ class App extends Component {
       this.runLifecycle(this.state.speed);
     } else if (status === "pause") {
       console.log("paused!");
-      clearInterval(this.state.runInterval);
+      clearInterval(this.runInterval);
       this.setState({runInterval: null});
     } else if (status === "clear") {
-      clearInterval(this.state.runInterval);
+      clearInterval(this.runInterval);
       let activeCells = this.generateClear(this.state.size);
       this.setState({runInterval: null, activeCells: activeCells, generations: 0});
     }
@@ -263,7 +263,7 @@ class App extends Component {
 
   render() {
     let generations = "Generations: " + this.state.generations;
-    let runStatus = this.state.runInterval ? "Run" : "Pause";
+    let runStatus = this.runInterval ? "Run" : "Pause";
     return (
       <div className="container">
         <Controls
