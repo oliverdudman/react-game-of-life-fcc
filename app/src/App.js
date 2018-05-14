@@ -160,7 +160,6 @@ class App extends Component {
       }
       this.setState({activeCells: activeCells, generations: generations});
     }, speed.time);
-    this.setState({speed: speed});
   }
 
   calculateCellStatus(prevCells, height, width) {
@@ -238,6 +237,7 @@ class App extends Component {
     let speed = e.target.innerHTML.toLowerCase();
     if (this.runInterval) {
       this.runLifecycle(this.SPEEDS[speed]);
+      this.setState({speed: speed});
     } else {
       this.setState({speed: this.SPEEDS[speed], generations: 0});
     }
