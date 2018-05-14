@@ -23,7 +23,6 @@ class Board extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("updated");
     let drawSquare = this.drawSquare;
     let c = document.getElementById("board-canvas");
     let ctx = c.getContext("2d");
@@ -57,7 +56,6 @@ class Board extends React.Component {
   }
 
   render() {
-    console.log("rendered");
     let canvasWidth = this.props.BOARDSIZES[this.props.size].w * (this.cellSize + this.cellMargin);
     let canvasHeight = this.props.BOARDSIZES[this.props.size].h * (this.cellSize + this.cellMargin);
 
@@ -246,11 +244,9 @@ class App extends Component {
 
   handleChangeStatus(e) {
     let status = e.target.innerHTML.toLowerCase();
-    console.log(status);
     if (status === "run") {
       this.runLifecycle(this.state.speed);
     } else if (status === "pause") {
-      console.log("paused!");
       clearInterval(this.runInterval);
       this.setState({runInterval: null});
     } else if (status === "clear") {
