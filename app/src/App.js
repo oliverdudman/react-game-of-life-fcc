@@ -96,6 +96,53 @@ function Controls(props) {
   )
 }
 
+function Dropdown(props) {
+  return (
+    <div>
+      <select onChange={props.handleChange}>
+        {
+          props.values.map((value) => {
+            return <option key={value}>{value}</option>
+          })
+        }
+      </select>
+    </div>
+  )
+}
+
+class Range extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: 500
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({value: e.target.value});
+  }
+  render() {
+    return <input type="range" min="10" max="2000" step="40" value={this.state.value} onChange={this.handleChange}/>
+  }
+}
+
+class ControlGroup extends React.Component {
+  render() {
+    console.log(this.props.sizes);
+    return (
+      <div className="ctrls">
+        <Button text="Run" size="large" />
+        <Range />
+        <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChange}/>
+
+      </div>
+    )
+  }
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -257,11 +304,19 @@ class App extends Component {
 
   }
 
+  dummyFunc(e) {
+    console.log(e.target.value);
+  }
+
   render() {
     let generations = "Generations: " + this.state.generations;
     let runStatus = this.runInterval ? "Run" : "Pause";
     return (
       <div className="container">
+        <ControlGroup
+          sizes={this.BOARDSIZES}
+          handleChange={this.dummyFunc.bind(this)}
+        />
         <Controls
           btns={["Run", "Pause", "Clear"]}
           activeBtn={runStatus}
