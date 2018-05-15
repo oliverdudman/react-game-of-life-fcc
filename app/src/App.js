@@ -99,10 +99,10 @@ function Controls(props) {
 function Dropdown(props) {
   return (
     <div>
-      <select onChange={props.handleChange}>
+      <select onChange={props.handleChange} value={props.currentValue}>
         {
           props.values.map((value) => {
-            return <option key={value}>{value}</option>
+            return <option key={value} value={value}>{value}</option>
           })
         }
       </select>
@@ -131,12 +131,11 @@ class Range extends Component {
 
 class ControlGroup extends React.Component {
   render() {
-    console.log(this.props.sizes);
     return (
       <div className="ctrls">
         <Button text="Run" size="large" />
         <Range />
-        <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChange}/>
+        <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
 
       </div>
     )
@@ -265,9 +264,9 @@ class App extends Component {
     this.setState({activeCells: activeCells});
   }
 
-  handleChangeSize(size) {
+  handleChangeSize(e) {
     clearInterval(this.runInterval);//clear running lifecycle
-    let gridSize = size.target.innerHTML;
+    let gridSize = e.target.value;
 
     //update size if different from current size
     if (gridSize !== this.state.size) {
@@ -315,7 +314,9 @@ class App extends Component {
       <div className="container">
         <ControlGroup
           sizes={this.BOARDSIZES}
+          currentSize={this.state.size}
           handleChange={this.dummyFunc.bind(this)}
+          handleChangeSize={this.handleChangeSize}
         />
         <Controls
           btns={["Run", "Pause", "Clear"]}
@@ -330,14 +331,6 @@ class App extends Component {
           BOARDSIZES={this.BOARDSIZES}
           activeCells={this.state.activeCells}
           handleCellClick={this.handleCellClick}
-        />
-        <Controls
-          btns={["Small", "Medium", "Large"]}
-          activeBtn={this.state.size}
-          size="large"
-          textLabel="Size:"
-          labelPosition="left"
-          handleClick={this.handleChangeSize}
         />
         <Controls
           btns={["Slow", "Medium", "Fast"]}
