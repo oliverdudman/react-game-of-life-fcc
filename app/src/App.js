@@ -99,6 +99,7 @@ function Controls(props) {
 function Dropdown(props) {
   return (
     <div>
+      <p>Size</p>
       <select onChange={props.handleChange} value={props.currentValue}>
         {
           props.values.map((value) => {
@@ -127,7 +128,7 @@ class ControlGroup extends React.Component {
   render() {
     return (
       <div className="ctrls">
-        <Button text="Run" size="large" />
+        <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
         <Range curValue={this.props.curSpeed} handleChange={this.props.handleChangeSpeed}/>
         <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
       </div>
@@ -148,9 +149,9 @@ class App extends Component {
     this.state = {
       curSpeed: 500,
       size: "Medium",
-      runInterval: null,
       activeCells: this.generateRandom(),
       generations: 0,
+      runStatus: true
     };
 
     this.handleCellClick = this.handleCellClick.bind(this);
@@ -174,6 +175,7 @@ class App extends Component {
 
   runLifecycle(speed) {
     clearInterval(this.runInterval);
+    this.setState({runStatus: true});
     this.runInterval = setInterval(() => {
       let activeCells = this.calculateCellStatus(this.state.activeCells, this.BOARDSIZES[this.state.size].h, this.BOARDSIZES[this.state.size].w);
       let generations = this.state.generations;
@@ -185,7 +187,7 @@ class App extends Component {
       // clear timer if no active cells
       if (activeCellsLeft === -1) {
         clearInterval(this.runInterval);
-        this.setState({runInterval: null});
+        this.setState({runStatus: false});
       } else {
         generations++;
       }
@@ -260,7 +262,7 @@ class App extends Component {
       let height = this.BOARDSIZES[gridSize].h;
       let width = this.BOARDSIZES[gridSize].w;
       let activeCells = Array(height).fill().map(() => Array(width).fill(0));
-      this.setState({runInterval: null, size: gridSize, activeCells: activeCells, generations: 0});
+      this.setState({runStatus: false, size: gridSize, activeCells: activeCells, generations: 0});
     }
   }
 
@@ -277,33 +279,26 @@ class App extends Component {
   handleChangeStatus(e) {
     let status = e.target.innerHTML.toLowerCase();
     if (status === "run") {
-      this.runLifecycle(this.state.speed);
-    } else if (status === "pause") {
+      this.runLifecycle(this.state.curSpeed);
+    } else {
       clearInterval(this.runInterval);
-      this.setState({runInterval: null});
-    } else if (status === "clear") {
-      clearInterval(this.runInterval);
-      let activeCells = this.generateClear(this.state.size);
-      this.setState({runInterval: null, activeCells: activeCells, generations: 0});
+      this.setState({runStatus: false});
     }
-
-  }
-
-  dummyFunc(e) {
-    console.log(e.target.value);
   }
 
   render() {
     let generations = "Generations: " + this.state.generations;
-    let runStatus = this.runInterval ? "Run" : "Pause";
+    let runStatus = this.state.runStatus ? "Pause" : "Run";
     return (
       <div className="container">
         <ControlGroup
+          runStatus={runStatus}
           sizes={this.BOARDSIZES}
           currentSize={this.state.size}
           curSpeed={this.state.curSpeed}
           handleChangeSpeed={this.handleChangeSpeed}
           handleChangeSize={this.handleChangeSize}
+          handleChangeStatus={this.handleChangeStatus}
         />
         <Controls
           btns={["Run", "Pause", "Clear"]}
@@ -311,7 +306,7 @@ class App extends Component {
           size="medium"
           textLabel={generations}
           labelPosition="right"
-          handleClick={this.handleChangeStatus}
+          // handleClick={this.handleChangeStatus}
         />
         <Board
           size={this.state.size}
