@@ -110,23 +110,17 @@ function Dropdown(props) {
   )
 }
 
-class Range extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: 500
-    }
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(e) {
-    this.setState({value: e.target.value});
-  }
-  render() {
-    return <input type="range" min="10" max="2000" step="40" value={this.state.value} onChange={this.handleChange}/>
-  }
+function Range(props) {
+  return (
+    <input
+      className="slider"
+      type="range"
+      min="5"
+      max="1000"
+      value={props.curValue}
+      onChange={props.handleChange}
+    />
+  )
 }
 
 class ControlGroup extends React.Component {
@@ -134,9 +128,8 @@ class ControlGroup extends React.Component {
     return (
       <div className="ctrls">
         <Button text="Run" size="large" />
-        <Range />
+        <Range curValue={this.props.curSpeed} handleChange={this.props.handleChangeSpeed}/>
         <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
-
       </div>
     )
   }
@@ -152,14 +145,8 @@ class App extends Component {
       Large: {w: 100, h: 80, text: "Large"}
     };
 
-    this.SPEEDS = {
-      slow: {time: 800, text: "Slow"},
-      medium: {time: 400, text: "Medium"},
-      fast: {time: 10, text: "Fast"}
-    };
-
     this.state = {
-      speed: this.SPEEDS.slow,
+      curSpeed: 500,
       size: "Medium",
       runInterval: null,
       activeCells: this.generateRandom(),
@@ -178,7 +165,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.runLifecycle(this.state.speed);
+    this.runLifecycle(this.state.curSpeed);
   }
 
   componentWillUnmount() {
@@ -203,7 +190,7 @@ class App extends Component {
         generations++;
       }
       this.setState({activeCells: activeCells, generations: generations});
-    }, speed.time);
+    }, speed);
   }
 
   calculateCellStatus(prevCells, height, width) {
@@ -278,14 +265,13 @@ class App extends Component {
   }
 
   handleChangeSpeed(e) {
-    let speed = e.target.innerHTML.toLowerCase();
+    let speed = e.target.value;
     if (this.runInterval) {
-      this.runLifecycle(this.SPEEDS[speed]);
-      this.setState({speed: speed});
+      this.runLifecycle(speed);
+      this.setState({curSpeed: speed});
     } else {
-      this.setState({speed: this.SPEEDS[speed], generations: 0});
+      this.setState({curSpeed: speed, generations: 0});
     }
-
   }
 
   handleChangeStatus(e) {
@@ -315,7 +301,8 @@ class App extends Component {
         <ControlGroup
           sizes={this.BOARDSIZES}
           currentSize={this.state.size}
-          handleChange={this.dummyFunc.bind(this)}
+          curSpeed={this.state.curSpeed}
+          handleChangeSpeed={this.handleChangeSpeed}
           handleChangeSize={this.handleChangeSize}
         />
         <Controls
@@ -331,14 +318,6 @@ class App extends Component {
           BOARDSIZES={this.BOARDSIZES}
           activeCells={this.state.activeCells}
           handleCellClick={this.handleCellClick}
-        />
-        <Controls
-          btns={["Slow", "Medium", "Fast"]}
-          activeBtn={this.state.speed.text}
-          size="large"
-          textLabel="Speed:"
-          labelPosition="left"
-          handleClick={this.handleChangeSpeed}
         />
       </div>
     );
