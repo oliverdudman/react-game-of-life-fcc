@@ -86,7 +86,7 @@ function Range(props) {
       className="slider"
       type="range"
       min="1"
-      max="6"
+      max="5"
       step="0.1"
       value={Math.log(2000 / props.curValue)}
       onChange={props.handleChange}
