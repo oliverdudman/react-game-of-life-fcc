@@ -99,7 +99,6 @@ function Controls(props) {
 function Dropdown(props) {
   return (
     <div>
-      <p>Size</p>
       <select onChange={props.handleChange} value={props.currentValue}>
         {
           props.values.map((value) => {
@@ -128,9 +127,21 @@ class ControlGroup extends React.Component {
   render() {
     return (
       <div className="ctrls">
-        <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
-        <Range curValue={this.props.curSpeed} handleChange={this.props.handleChangeSpeed}/>
-        <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
+        <div className="ctrls__left">
+          <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
+        </div>
+        <div className="ctrls__right">
+          <div className="ctrls__item">
+            <p>Speed: </p>
+            <Range curValue={this.props.curSpeed} handleChange={this.props.handleChangeSpeed}/>
+          </div>
+          <div className="ctrls__item">
+            <p>Size: </p>
+            <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
+          </div>
+
+
+        </div>
       </div>
     )
   }

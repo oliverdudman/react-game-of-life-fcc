@@ -15,6 +15,25 @@
 
 }
 
+.ctrls__left {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.ctrls__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ctrls__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .ctrls__label {
   width: 120px;
 
