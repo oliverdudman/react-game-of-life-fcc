@@ -18,8 +18,9 @@
 .ctrls__left {
   height: 100%;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .ctrls__right {
@@ -46,4 +47,18 @@
 
 .slider {
   direction: rtl;
+}
+
+.generations-display {
+  border-spacing: 0;
+
+  font-size: 1.2em;
+  text-align: center;
+  color: $font-color;
+  background-color: darken($board-base-color, 30);
+
+  & td, & th {
+    padding: 5px;
+    border: 1px solid red;
+  }
 }

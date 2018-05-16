@@ -65,37 +65,6 @@ class Board extends React.Component {
   }
 }
 
-function Controls(props) {
-  let classes = props.size === "large" ? "ctrls ctrls--large" : "ctrls ctrls--medium";
-  let handleClick = props.handleClick;
-
-  return (
-    <div className={classes}>
-      {
-        props.labelPosition === "left" &&
-        <span className="ctrls__label">
-          {props.textLabel}
-        </span>
-      }
-
-      {
-        props.btns.map((btn, index) => {
-          return (
-            <Button key={index} handleClick={handleClick} text={btn} size={props.size} active={props.activeBtn === btn} />
-          );
-        })
-      }
-
-      {
-        props.labelPosition === "right" &&
-        <span className="ctrls__label">
-          {props.textLabel}
-        </span>
-      }
-    </div>
-  )
-}
-
 function Dropdown(props) {
   return (
     <div>
@@ -129,6 +98,18 @@ class ControlGroup extends React.Component {
       <div className="ctrls">
         <div className="ctrls__left">
           <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
+          <table className="generations-display">
+            <thead>
+              <tr>
+                <th>Generations</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{this.props.generations}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div className="ctrls__right">
           <div className="ctrls__item">
@@ -298,7 +279,6 @@ class App extends Component {
   }
 
   render() {
-    let generations = "Generations: " + this.state.generations;
     let runStatus = this.state.runStatus ? "Pause" : "Run";
     return (
       <div className="container">
@@ -310,14 +290,7 @@ class App extends Component {
           handleChangeSpeed={this.handleChangeSpeed}
           handleChangeSize={this.handleChangeSize}
           handleChangeStatus={this.handleChangeStatus}
-        />
-        <Controls
-          btns={["Run", "Pause", "Clear"]}
-          activeBtn={runStatus}
-          size="medium"
-          textLabel={generations}
-          labelPosition="right"
-          // handleClick={this.handleChangeStatus}
+          generations={this.state.generations}
         />
         <Board
           size={this.state.size}
