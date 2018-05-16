@@ -80,13 +80,15 @@ function Dropdown(props) {
 }
 
 function Range(props) {
+  console.log(props.curValue);
   return (
     <input
       className="slider"
       type="range"
-      min="5"
-      max="1000"
-      value={props.curValue}
+      min="1"
+      max="6"
+      step="0.1"
+      value={Math.log(2000 / props.curValue)}
       onChange={props.handleChange}
     />
   )
@@ -259,7 +261,9 @@ class App extends Component {
   }
 
   handleChangeSpeed(e) {
-    let speed = e.target.value;
+    // allows keyboard input on slider for accessibility
+    let speed = 2000 / Math.exp(e.target.value);
+    console.log(speed);
     if (this.runInterval) {
       this.runLifecycle(speed);
       this.setState({curSpeed: speed});
