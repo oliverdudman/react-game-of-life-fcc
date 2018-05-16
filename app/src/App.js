@@ -122,8 +122,10 @@ class ControlGroup extends React.Component {
             <p>Size: </p>
             <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
           </div>
-
-
+          <div className="ctrls__item">
+            <p>Presets: </p>
+            <Dropdown values={this.props.presets} handleChange={this.props.handleChangePattern} currentValue={this.props.currentPattern} />
+          </div>
         </div>
       </div>
     )
@@ -140,12 +142,28 @@ class App extends Component {
       Large: {w: 100, h: 80, text: "Large"}
     };
 
+    this.PRESETS = {
+      Block: function(array, iMid, jMid) {
+        let result = array;
+        result[jMid][iMid] = 1;
+        result[jMid][iMid + 1] = 1;
+        result[jMid + 1][iMid] = 1;
+        result[jMid + 1][iMid + 1] = 1;
+        return result;
+      },
+      Random: function(array, iMid, jMid, size) {
+        let result = this.generateRandom(this.state.size);
+        return result;
+      }
+    }
+
     this.state = {
       curSpeed: 500,
       size: "Medium",
-      activeCells: this.generateRandom(),
+      activeCells: this.generateRandom("Medium"),
       generations: 0,
-      runStatus: true
+      runStatus: true,
+      currentPattern: "Random"
     };
 
     this.handleCellClick = this.handleCellClick.bind(this);
@@ -156,6 +174,7 @@ class App extends Component {
     this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
     this.generateClear = this.generateClear.bind(this);
+    this.handleChangePattern = this.handleChangePattern.bind(this);
 
   }
 
@@ -222,15 +241,32 @@ class App extends Component {
     return nextCells;
   }
 
+  handleChangePattern(option) {
+    clearInterval(this.runInterval);
+    let pattern = option.target.value;
+    let size= this.state.size;
+    let activeCells = this.generateClear(size);
+    let iMid = Math.floor(this.BOARDSIZES[size].w / 2);
+    let jMid = Math.floor(this.BOARDSIZES[size].h / 2);
+
+    if (this.PRESETS.hasOwnProperty(pattern)) {
+      let func = this.PRESETS[pattern].bind(this);
+      activeCells = func(activeCells, iMid, jMid);
+      console.log(activeCells);
+    }
+    this.setState({activeCells: activeCells, currentPattern: pattern, runStatus: false, generations : 0});
+
+  }
+
   generateClear(size) {
     return Array(this.BOARDSIZES[size].h).fill().map(() => Array(this.BOARDSIZES[size].w).fill(0));
   }
 
-  generateRandom() {
-    let activeCells = Array(this.BOARDSIZES.Medium.h).fill().map(() => Array(this.BOARDSIZES.Medium.w).fill(0));
-    let numActive = Math.floor(Math.random() * this.BOARDSIZES.Medium.h * this.BOARDSIZES.Medium.w / 2);
-    let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES.Medium.w));
-    let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES.Medium.h));
+  generateRandom(size) {
+    let activeCells = this.generateClear(size)
+    let numActive = Math.floor(Math.random() * this.BOARDSIZES[size].h * this.BOARDSIZES[size].w / 2);
+    let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].w));
+    let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].h));
     for (let i = 0; i < numActive; i++) {
       activeCells[rows[i]][columns[i]] = 1;
     }
@@ -295,6 +331,9 @@ class App extends Component {
           handleChangeSize={this.handleChangeSize}
           handleChangeStatus={this.handleChangeStatus}
           generations={this.state.generations}
+          presets={Object.getOwnPropertyNames(this.PRESETS)}
+          handleChangePattern={this.handleChangePattern}
+          currentPattern={this.state.currentPattern}
         />
         <Board
           size={this.state.size}
