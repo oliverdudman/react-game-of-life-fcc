@@ -94,24 +94,30 @@ function Range(props) {
   )
 }
 
+function Generations(props) {
+  return (
+    <table className="generations-display">
+      <thead>
+        <tr>
+          <th>Generations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{props.generations}</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
+
 class ControlGroup extends React.Component {
   render() {
     return (
       <div className="ctrls">
         <div className="ctrls__left">
           <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
-          <table className="generations-display">
-            <thead>
-              <tr>
-                <th>Generations</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{this.props.generations}</td>
-              </tr>
-            </tbody>
-          </table>
+          <Generations generations={this.props.generations} />
         </div>
         <div className="ctrls__right">
           <div className="ctrls__item">
