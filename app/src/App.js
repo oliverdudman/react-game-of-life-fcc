@@ -305,12 +305,11 @@ class App extends Component {
   handleChangeSpeed(e) {
     // allows keyboard input on slider for accessibility
     let speed = 2000 / Math.exp(e.target.value);
-    console.log(speed);
-    if (this.runInterval) {
+    if (this.state.runStatus) {
       this.runLifecycle(speed);
       this.setState({curSpeed: speed});
     } else {
-      this.setState({curSpeed: speed, generations: 0});
+      this.setState({curSpeed: speed});
     }
   }
 
