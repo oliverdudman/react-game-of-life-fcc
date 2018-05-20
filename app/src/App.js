@@ -267,10 +267,10 @@ class App extends Component {
     return nextCells;
   }
 
-  handleChangePattern(option) {
+  handleChangePattern(option, newSize) {
     clearTimeout(this.runInterval);
     let pattern = option.target ? option.target.value : option;
-    let size= this.state.size;
+    let size = newSize || this.state.size;
     let activeCells = this.generateClear(size);
     let iMid = Math.floor(this.BOARDSIZES[size].w / 2);
     let jMid = Math.floor(this.BOARDSIZES[size].h / 2);
@@ -315,11 +315,8 @@ class App extends Component {
 
     //update size if different from current size
     if (gridSize !== this.state.size) {
-      let height = this.BOARDSIZES[gridSize].h;
-      let width = this.BOARDSIZES[gridSize].w;
-      let activeCells = Array(height).fill().map(() => Array(width).fill(0));
-      this.setState({runStatus: false, size: gridSize, activeCells: activeCells, generations: 0});
-      this.handleChangePattern("Clear")
+      this.setState({runStatus: false, size: gridSize, generations: 0});
+      this.handleChangePattern("Clear", gridSize);
     }
   }
 
