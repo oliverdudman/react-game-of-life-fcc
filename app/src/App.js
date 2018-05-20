@@ -80,12 +80,11 @@ function Dropdown(props) {
 }
 
 function Range(props) {
-  console.log(props.curValue);
   return (
     <input
       className="slider"
       type="range"
-      min="1"
+      min="0.5"
       max="5"
       step="0.1"
       value={Math.log(2000 / props.curValue)}
@@ -189,29 +188,44 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.runInterval);
+    clearTimeout(this.runInterval);
   }
 
   runLifecycle(speed) {
-    clearInterval(this.runInterval);
-    this.setState({runStatus: true});
-    this.runInterval = setInterval(() => {
-      let activeCells = this.calculateCellStatus(this.state.activeCells, this.BOARDSIZES[this.state.size].h, this.BOARDSIZES[this.state.size].w);
-      let generations = this.state.generations;
+    var that = this;
+    function lifeCycle() {
+      let activeCells = that.calculateCellStatus(that.state.activeCells, that.BOARDSIZES[that.state.size].h, that.BOARDSIZES[that.state.size].w);
+      let generations = that.state.generations;
       // look to see if there are any active cells
       let activeCellsLeft = activeCells.findIndex(function(element) {
         let inner = element.findIndex((elementInner) => elementInner > 0);
         return inner !== -1;
       });
       // clear timer if no active cells
-      if (activeCellsLeft === -1) {
-        clearInterval(this.runInterval);
-        this.setState({runStatus: false});
-      } else {
+      if (activeCellsLeft !== -1) {
         generations++;
+        that.runInterval = setTimeout(lifeCycle, that.state.curSpeed);
+      } else {
+        clearTimeout(that.runInterval);
+        that.setState({runStatus: false});
       }
-      this.setState({activeCells: activeCells, generations: generations});
-    }, speed);
+
+      that.setState({activeCells: activeCells, generations: generations});
+
+    }
+
+    let activeCellsLeft = this.state.activeCells.findIndex(function(element) {
+      let inner = element.findIndex((elementInner) => elementInner > 0);
+      return inner !== -1;
+    });
+
+    clearTimeout(this.runInterval);
+
+    if (activeCellsLeft !== -1) {
+      this.setState({runStatus: true});
+      lifeCycle();// start running cycle
+    }
+
   }
 
   calculateCellStatus(prevCells, height, width) {
@@ -248,7 +262,7 @@ class App extends Component {
   }
 
   handleChangePattern(option) {
-    clearInterval(this.runInterval);
+    clearTimeout(this.runInterval);
     let pattern = option.target.value;
     let size= this.state.size;
     let activeCells = this.generateClear(size);
@@ -290,7 +304,7 @@ class App extends Component {
   }
 
   handleChangeSize(e) {
-    clearInterval(this.runInterval);//clear running lifecycle
+    clearTimeout(this.runInterval);//clear running lifecycle
     let gridSize = e.target.value;
 
     //update size if different from current size
@@ -303,14 +317,9 @@ class App extends Component {
   }
 
   handleChangeSpeed(e) {
-    // allows keyboard input on slider for accessibility
+    // reverse slider allows keyboard input on slider for accessibility
     let speed = 2000 / Math.exp(e.target.value);
-    if (this.state.runStatus) {
-      this.runLifecycle(speed);
-      this.setState({curSpeed: speed});
-    } else {
-      this.setState({curSpeed: speed});
-    }
+    this.setState({curSpeed: speed});
   }
 
   handleChangeStatus(e) {
@@ -318,7 +327,7 @@ class App extends Component {
     if (status === "run") {
       this.runLifecycle(this.state.curSpeed);
     } else {
-      clearInterval(this.runInterval);
+      clearTimeout(this.runInterval);
       this.setState({runStatus: false});
     }
   }
