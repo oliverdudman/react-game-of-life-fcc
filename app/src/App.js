@@ -68,7 +68,7 @@ class Board extends React.Component {
 function Dropdown(props) {
   return (
     <div>
-      <select onChange={props.handleChange} value={props.currentValue}>
+      <select onChange={props.handleChange} value={props.curValue}>
         {
           props.values.map((value) => {
             return <option key={value} value={value}>{value}</option>
@@ -110,6 +110,36 @@ function Generations(props) {
   )
 }
 
+function ControlItem(props) {
+  let control;
+
+  if (!props.type) {
+    console.log("ControlItem Error: No Type");
+    return <div></div>
+  } else if (props.type === "Slider") {
+    control =
+    <Range
+      curValue={props.value}
+      handleChange={props.eventHandler}
+    />
+  } else if (props.type === "Dropdown") {
+    control =
+    <Dropdown
+      curValue={props.value}
+      values={props.values}
+      handleChange={props.eventHandler}
+    />
+  }
+
+  return (
+    <div className="ctrls__item">
+      <p>{props.label}: </p>
+      {control}
+    </div>
+  )
+
+}
+
 class ControlGroup extends React.Component {
   render() {
     return (
@@ -119,18 +149,26 @@ class ControlGroup extends React.Component {
           <Generations generations={this.props.generations} />
         </div>
         <div className="ctrls__right">
-          <div className="ctrls__item">
-            <p>Speed: </p>
-            <Range curValue={this.props.curSpeed} handleChange={this.props.handleChangeSpeed}/>
-          </div>
-          <div className="ctrls__item">
-            <p>Size: </p>
-            <Dropdown values={Object.keys(this.props.sizes)} handleChange={this.props.handleChangeSize} currentValue={this.props.currentSize}/>
-          </div>
-          <div className="ctrls__item">
-            <p>Presets: </p>
-            <Dropdown values={this.props.presets} handleChange={this.props.handleChangePattern} currentValue={this.props.currentPattern} />
-          </div>
+          <ControlItem
+            label="Speed"
+            type="Slider"
+            value={this.props.curSpeed}
+            eventHandler={this.props.handleChangeSpeed}
+          />
+          <ControlItem
+            label="Size"
+            type="Dropdown"
+            value={this.props.currentSize}
+            values={Object.keys(this.props.sizes)}
+            eventHandler={this.props.handleChangeSize}
+          />
+          <ControlItem
+            label="Presets"
+            type="Dropdown"
+            value={this.props.currentPattern}
+            values={this.props.presets}
+            eventHandler={this.props.handleChangePattern}
+          />
         </div>
       </div>
     )
