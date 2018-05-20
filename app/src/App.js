@@ -199,37 +199,40 @@ class App extends Component {
 
   runLifecycle(speed) {
     var that = this;
+
+    if (checkCells(that.state.activeCells)) {
+      this.setState({runStatus: true});
+      clearTimeout(that.runInterval);
+      lifeCycle();// start running cycle
+    }
+
     function lifeCycle() {
       let activeCells = that.calculateCellStatus(that.state.activeCells, that.BOARDSIZES[that.state.size].h, that.BOARDSIZES[that.state.size].w);
       let generations = that.state.generations;
-      // look to see if there are any active cells
-      let activeCellsLeft = activeCells.findIndex(function(element) {
-        let inner = element.findIndex((elementInner) => elementInner > 0);
-        return inner !== -1;
-      });
-      // clear timer if no active cells
-      if (activeCellsLeft !== -1) {
-        generations++;
+
+      // continue lifeCycle if there are still active cells
+      if (checkCells(activeCells)) {
         that.runInterval = setTimeout(lifeCycle, that.state.curSpeed);
       } else {
-        clearTimeout(that.runInterval);
         that.setState({runStatus: false});
       }
 
+      generations++;
       that.setState({activeCells: activeCells, generations: generations});
 
     }
 
-    let activeCellsLeft = this.state.activeCells.findIndex(function(element) {
-      let inner = element.findIndex((elementInner) => elementInner > 0);
-      return inner !== -1;
-    });
-
-    clearTimeout(this.runInterval);
-
-    if (activeCellsLeft !== -1) {
-      this.setState({runStatus: true});
-      lifeCycle();// start running cycle
+    function checkCells(cells) {
+      /*
+      checks input to find active cells-
+        return values:
+          true if there are active cells
+          false if 0 active cells
+       */
+      return cells.findIndex(function(element) {
+        let inner = element.findIndex((elementInner) => elementInner > 0);
+        return inner !== -1;
+      }) !== -1;
     }
 
   }
