@@ -151,6 +151,9 @@ class App extends Component {
     };
 
     this.PRESETS = {
+      Clear: function(array) {
+        return array;
+      },
       Block: function(array, iMid, jMid) {
         let result = array;
         result[jMid][iMid] = 1;
@@ -266,7 +269,7 @@ class App extends Component {
 
   handleChangePattern(option) {
     clearTimeout(this.runInterval);
-    let pattern = option.target.value;
+    let pattern = option.target ? option.target.value : option;
     let size= this.state.size;
     let activeCells = this.generateClear(size);
     let iMid = Math.floor(this.BOARDSIZES[size].w / 2);
@@ -316,6 +319,7 @@ class App extends Component {
       let width = this.BOARDSIZES[gridSize].w;
       let activeCells = Array(height).fill().map(() => Array(width).fill(0));
       this.setState({runStatus: false, size: gridSize, activeCells: activeCells, generations: 0});
+      this.handleChangePattern("Clear")
     }
   }
 
