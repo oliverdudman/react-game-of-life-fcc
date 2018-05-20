@@ -140,41 +140,6 @@ function ControlItem(props) {
 
 }
 
-class ControlGroup extends React.Component {
-  render() {
-    return (
-      <div className="ctrls">
-        <div className="ctrls__left">
-          <Button text={this.props.runStatus} size="large" handleClick={this.props.handleChangeStatus}/>
-          <Generations generations={this.props.generations} />
-        </div>
-        <div className="ctrls__right">
-          <ControlItem
-            label="Speed"
-            type="Slider"
-            value={this.props.curSpeed}
-            eventHandler={this.props.handleChangeSpeed}
-          />
-          <ControlItem
-            label="Size"
-            type="Dropdown"
-            value={this.props.currentSize}
-            values={Object.keys(this.props.sizes)}
-            eventHandler={this.props.handleChangeSize}
-          />
-          <ControlItem
-            label="Presets"
-            type="Dropdown"
-            value={this.props.currentPattern}
-            values={this.props.presets}
-            eventHandler={this.props.handleChangePattern}
-          />
-        </div>
-      </div>
-    )
-  }
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -374,19 +339,34 @@ class App extends Component {
     let runStatus = this.state.runStatus ? "Pause" : "Run";
     return (
       <div className="container">
-        <ControlGroup
-          runStatus={runStatus}
-          sizes={this.BOARDSIZES}
-          currentSize={this.state.size}
-          curSpeed={this.state.curSpeed}
-          handleChangeSpeed={this.handleChangeSpeed}
-          handleChangeSize={this.handleChangeSize}
-          handleChangeStatus={this.handleChangeStatus}
-          generations={this.state.generations}
-          presets={Object.getOwnPropertyNames(this.PRESETS)}
-          handleChangePattern={this.handleChangePattern}
-          currentPattern={this.state.currentPattern}
-        />
+        <div className="ctrls">
+          <div className="ctrls__left">
+            <Button text={runStatus} size="large" handleClick={this.handleChangeStatus}/>
+            <Generations generations={this.state.generations} />
+          </div>
+          <div className="ctrls__right">
+            <ControlItem
+              label="Speed"
+              type="Slider"
+              value={this.state.curSpeed}
+              eventHandler={this.handleChangeSpeed}
+            />
+            <ControlItem
+              label="Size"
+              type="Dropdown"
+              value={this.state.size}
+              values={Object.keys(this.BOARDSIZES)}
+              eventHandler={this.handleChangeSize}
+            />
+            <ControlItem
+              label="Presets"
+              type="Dropdown"
+              value={this.state.currentPattern}
+              values={Object.getOwnPropertyNames(this.PRESETS)}
+              eventHandler={this.handleChangePattern}
+            />
+          </div>
+        </div>
         <Board
           size={this.state.size}
           BOARDSIZES={this.BOARDSIZES}
