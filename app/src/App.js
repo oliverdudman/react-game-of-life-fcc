@@ -151,8 +151,9 @@ class App extends Component {
     };
 
     this.PRESETS = {
-      Clear: function(array) {
-        return array;
+      Clear: function(array, iMid, jMid, size, size2) {
+        console.log(size2);
+        return Array(size2.h).fill().map(() => Array(size2.w).fill(0));
       },
       Block: function(array, iMid, jMid) {
         let result = array;
@@ -162,7 +163,7 @@ class App extends Component {
         result[jMid + 1][iMid + 1] = 1;
         return result;
       },
-      Random: function(array, iMid, jMid, size) {
+      Random: function(array, iMid, jMid, size, size2) {
         let result = this.generateRandom(this.state.size);
         return result;
       }
@@ -184,7 +185,6 @@ class App extends Component {
     this.runLifecycle = this.runLifecycle.bind(this);
     this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
-    this.generateClear = this.generateClear.bind(this);
     this.handleChangePattern = this.handleChangePattern.bind(this);
 
   }
@@ -274,25 +274,23 @@ class App extends Component {
     clearTimeout(this.runInterval);
     let pattern = option.target ? option.target.value : option;
     let size = newSize || this.state.size;
-    let activeCells = this.generateClear(size);
+    let activeCells = this.PRESETS["Clear"](null,null,null,null, this.BOARDSIZES[size]);
     let iMid = Math.floor(this.BOARDSIZES[size].w / 2);
     let jMid = Math.floor(this.BOARDSIZES[size].h / 2);
 
+    let size2 = this.BOARDSIZES[size];
+
     if (this.PRESETS.hasOwnProperty(pattern)) {
       let func = this.PRESETS[pattern].bind(this);
-      activeCells = func(activeCells, iMid, jMid);
+      activeCells = func(activeCells, iMid, jMid, size, size2);
       console.log(activeCells);
     }
     this.setState({activeCells: activeCells, currentPattern: pattern, runStatus: false, generations : 0});
 
   }
 
-  generateClear(size) {
-    return Array(this.BOARDSIZES[size].h).fill().map(() => Array(this.BOARDSIZES[size].w).fill(0));
-  }
-
   generateRandom(size) {
-    let activeCells = this.generateClear(size)
+    let activeCells = this.PRESETS["Clear"](null,null,null,null, this.BOARDSIZES[size]);
     let numActive = Math.floor(Math.random() * this.BOARDSIZES[size].h * this.BOARDSIZES[size].w / 2);
     let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].w));
     let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].h));
