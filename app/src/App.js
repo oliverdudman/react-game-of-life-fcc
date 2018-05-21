@@ -164,7 +164,13 @@ class App extends Component {
         return result;
       },
       Random: function(array, iMid, jMid, size, size2) {
-        let result = this.generateRandom(this.state.size);
+        let result = this.Clear(null,null,null,null,size2);
+        let numActive = Math.floor(Math.random() * size2.h * size2.w / 2);
+        let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * size2.w));
+        let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * size2.h));
+        for (let i = 0; i < numActive; i++) {
+          result[rows[i]][columns[i]] = 1;
+        }
         return result;
       }
     }
@@ -172,7 +178,7 @@ class App extends Component {
     this.state = {
       curSpeed: 500,
       size: "Medium",
-      activeCells: this.generateRandom("Medium"),
+      activeCells: this.PRESETS["Random"](null,null,null,null,this.BOARDSIZES["Medium"]),
       generations: 0,
       runStatus: true,
       currentPattern: "Random"
@@ -181,7 +187,6 @@ class App extends Component {
     this.handleCellClick = this.handleCellClick.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
     this.handleChangeSpeed = this.handleChangeSpeed.bind(this);
-    this.generateRandom = this.generateRandom.bind(this);
     this.runLifecycle = this.runLifecycle.bind(this);
     this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
@@ -281,23 +286,9 @@ class App extends Component {
     let size2 = this.BOARDSIZES[size];
 
     if (this.PRESETS.hasOwnProperty(pattern)) {
-      let func = this.PRESETS[pattern].bind(this);
-      activeCells = func(activeCells, iMid, jMid, size, size2);
-      console.log(activeCells);
+      activeCells = this.PRESETS[pattern](activeCells, iMid, jMid, size, size2);
     }
     this.setState({activeCells: activeCells, currentPattern: pattern, runStatus: false, generations : 0});
-
-  }
-
-  generateRandom(size) {
-    let activeCells = this.PRESETS["Clear"](null,null,null,null, this.BOARDSIZES[size]);
-    let numActive = Math.floor(Math.random() * this.BOARDSIZES[size].h * this.BOARDSIZES[size].w / 2);
-    let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].w));
-    let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * this.BOARDSIZES[size].h));
-    for (let i = 0; i < numActive; i++) {
-      activeCells[rows[i]][columns[i]] = 1;
-    }
-    return activeCells;
   }
 
   handleCellClick(cell) {
