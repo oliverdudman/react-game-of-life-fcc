@@ -151,23 +151,25 @@ class App extends Component {
     };
 
     this.PRESETS = {
-      Clear: function(array, iMid, jMid, size, size2) {
-        console.log(size2);
-        return Array(size2.h).fill().map(() => Array(size2.w).fill(0));
+      Clear: function(size) {
+        return Array(size.h).fill().map(() => Array(size.w).fill(0));
       },
-      Block: function(array, iMid, jMid) {
-        let result = array;
+      Block: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
         result[jMid][iMid] = 1;
         result[jMid][iMid + 1] = 1;
         result[jMid + 1][iMid] = 1;
         result[jMid + 1][iMid + 1] = 1;
         return result;
       },
-      Random: function(array, iMid, jMid, size, size2) {
-        let result = this.Clear(null,null,null,null,size2);
-        let numActive = Math.floor(Math.random() * size2.h * size2.w / 2);
-        let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * size2.w));
-        let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * size2.h));
+      Random: function(size) {
+        let result = this.Clear(size);
+        let numActive = Math.floor(Math.random() * size.h * size.w / 2);
+        let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * size.w));
+        let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * size.h));
         for (let i = 0; i < numActive; i++) {
           result[rows[i]][columns[i]] = 1;
         }
@@ -178,7 +180,7 @@ class App extends Component {
     this.state = {
       curSpeed: 500,
       size: "Medium",
-      activeCells: this.PRESETS["Random"](null,null,null,null,this.BOARDSIZES["Medium"]),
+      activeCells: this.PRESETS["Random"](this.BOARDSIZES["Medium"]),
       generations: 0,
       runStatus: true,
       currentPattern: "Random"
@@ -279,14 +281,15 @@ class App extends Component {
     clearTimeout(this.runInterval);
     let pattern = option.target ? option.target.value : option;
     let size = newSize || this.state.size;
-    let activeCells = this.PRESETS["Clear"](null,null,null,null, this.BOARDSIZES[size]);
-    let iMid = Math.floor(this.BOARDSIZES[size].w / 2);
-    let jMid = Math.floor(this.BOARDSIZES[size].h / 2);
 
-    let size2 = this.BOARDSIZES[size];
+    let activeCells;
 
+    // failsafe if no pattern in presets
     if (this.PRESETS.hasOwnProperty(pattern)) {
-      activeCells = this.PRESETS[pattern](activeCells, iMid, jMid, size, size2);
+      activeCells = this.PRESETS[pattern](this.BOARDSIZES[size]);
+    } else {
+      activeCells = this.PRESETS["Clear"](this.BOARDSIZES[size]);
+      console.log("Error: Pattern not found");
     }
     this.setState({activeCells: activeCells, currentPattern: pattern, runStatus: false, generations : 0});
   }
