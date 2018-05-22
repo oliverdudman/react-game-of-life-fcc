@@ -4,8 +4,8 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.cellSize = 10;
-    this.cellMargin = 2;
+    this.cellSize = 8;
+    this.cellMargin = 1;
     this.cellTotal = this.cellSize + this.cellMargin;
 
     this.drawSquare = this.drawSquare.bind(this);
@@ -50,7 +50,7 @@ class Board extends React.Component {
     let canvasHeight = this.props.size.h * (this.cellTotal);
 
     return (
-      <canvas id="board-canvas" onClick={this.handleClick} width={canvasWidth} height={canvasHeight} style={{backgroundColor: "grey", padding: "2px"}}></canvas>
+      <canvas id="board-canvas" className="board" onClick={this.handleClick} width={canvasWidth} height={canvasHeight}></canvas>
     )
   }
 }
