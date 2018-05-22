@@ -5,10 +5,14 @@ import './App.css';
 import './scss/App.scss';
 
 
-function Button(props) {
+function StateButtons(props) {
   let playPause = props.runStatus ? "fas fa-pause" : "fas fa-play";
   return (
-    <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
+    <div>
+      <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
+      <button onClick={props.handleReset} type="button" className="btn"><i className="fas fa-sync-alt"></i></button>
+    </div>
+
   )
 }
 
@@ -140,6 +144,7 @@ class App extends Component {
     this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
     this.handleChangePattern = this.handleChangePattern.bind(this);
+    this.handleReset = this.handleReset.bind(this);
 
   }
 
@@ -277,14 +282,21 @@ class App extends Component {
     }
   }
 
+  handleReset() {
+    let activeCells = this.PRESETS[this.state.currentPattern](this.BOARDSIZES[this.state.size]);
+    clearTimeout(this.runInterval);
+    this.setState({runStatus: false, activeCells: activeCells, generations: 0});
+  }
+
   render() {
     return (
       <div className="container">
         <div className="ctrls">
           <div className="ctrls__left">
-            <Button
+            <StateButtons
               runStatus={this.state.runStatus}
               handleStartStop={this.handleChangeStatus}
+              handleReset={this.handleReset}
             />
             <Generations generations={this.state.generations} />
           </div>
