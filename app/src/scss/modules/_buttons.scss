@@ -20,7 +20,11 @@
     cursor: pointer;
   }
 
-  // &:focus {
-  //   outline-color: lighten($board-base-color, 80);
-  // }
+  &--disabled {
+    color: darken($board-base-color, 10);
+
+    &:hover {
+      cursor: default;
+    }
+  }
 }

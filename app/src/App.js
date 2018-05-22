@@ -7,9 +7,13 @@ import './scss/App.scss';
 
 function StateButtons(props) {
   let playPause = props.runStatus ? "fas fa-pause" : "fas fa-play";
+  let disabledBtnCss = props.runStatus ? "btn btn--disabled" : "btn"
   return (
     <div>
       <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
+      <button onClick={props.handleStep} type="button" className={disabledBtnCss} disabled={props.runStatus}>
+        <i className="fas fa-step-forward"></i>
+      </button>
       <button onClick={props.handleReset} type="button" className="btn"><i className="fas fa-sync-alt"></i></button>
     </div>
 
@@ -145,6 +149,7 @@ class App extends Component {
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
     this.handleChangePattern = this.handleChangePattern.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleStep = this.handleStep.bind(this);
 
   }
 
@@ -156,7 +161,7 @@ class App extends Component {
     clearTimeout(this.runInterval);
   }
 
-  runLifecycle(speed) {
+  runLifecycle(speed, runOnce) {
     var that = this;
 
     if (checkCells(that.state.activeCells)) {
@@ -170,7 +175,7 @@ class App extends Component {
       let generations = that.state.generations;
 
       // continue lifeCycle if there are still active cells
-      if (checkCells(activeCells)) {
+      if (checkCells(activeCells) && !runOnce) {
         that.runInterval = setTimeout(lifeCycle, that.state.curSpeed);
       } else {
         that.setState({runStatus: false});
@@ -288,6 +293,12 @@ class App extends Component {
     this.setState({runStatus: false, activeCells: activeCells, generations: 0});
   }
 
+  handleStep() {
+    if (!this.state.runStatus) {
+      this.runLifecycle(this.state.curSpeed, true);
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -297,6 +308,7 @@ class App extends Component {
               runStatus={this.state.runStatus}
               handleStartStop={this.handleChangeStatus}
               handleReset={this.handleReset}
+              handleStep={this.handleStep}
             />
             <Generations generations={this.state.generations} />
           </div>
