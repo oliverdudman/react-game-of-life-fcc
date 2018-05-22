@@ -1,10 +1,8 @@
 .btn {
-  border-radius: 5px;
-  margin: 5px;
-
-  font-size: 1.3em;
-  background-color: darken($board-base-color, 30);
-  color: $font-color;
+  font-size: 2em;
+  color: darken($board-base-color, 30);
+  background-color: transparent;
+  border:none;
 
   &--large {
     width: 150px;
@@ -15,14 +13,14 @@
   }
 
   &.active, &:active {
-    background-color: darken($board-base-color, 10);
+    // background-color: darken($board-base-color, 10);
   }
 
   &:hover {
     cursor: pointer;
   }
 
-  &:focus {
-    outline-color: lighten($board-base-color, 80);
-  }
+  // &:focus {
+  //   outline-color: lighten($board-base-color, 80);
+  // }
 }

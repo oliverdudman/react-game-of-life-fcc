@@ -6,10 +6,9 @@ import './scss/App.scss';
 
 
 function Button(props) {
-  let classes = props.size === "large" ? "btn btn--large" : "btn btn--medium";
-  if (props.active) classes += " active";
+  let playPause = props.runStatus ? "fas fa-pause" : "fas fa-play";
   return (
-    <button className={classes} onClick={props.handleClick}>{props.text}</button>
+    <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
   )
 }
 
@@ -269,23 +268,24 @@ class App extends Component {
     this.setState({curSpeed: speed});
   }
 
-  handleChangeStatus(e) {
-    let status = e.target.innerHTML.toLowerCase();
-    if (status === "run") {
-      this.runLifecycle(this.state.curSpeed);
-    } else {
+  handleChangeStatus() {
+    if (this.state.runStatus) {
       clearTimeout(this.runInterval);
       this.setState({runStatus: false});
+    } else {
+      this.runLifecycle(this.state.curSpeed);
     }
   }
 
   render() {
-    let runStatus = this.state.runStatus ? "Pause" : "Run";
     return (
       <div className="container">
         <div className="ctrls">
           <div className="ctrls__left">
-            <Button text={runStatus} size="large" handleClick={this.handleChangeStatus}/>
+            <Button
+              runStatus={this.state.runStatus}
+              handleStartStop={this.handleChangeStatus}
+            />
             <Generations generations={this.state.generations} />
           </div>
           <div className="ctrls__right">
