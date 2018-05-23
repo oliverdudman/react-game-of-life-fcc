@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Board from './board';
 
-import './App.css';
 import './scss/App.scss';
 
 
@@ -23,7 +22,7 @@ function StateButtons(props) {
 function Dropdown(props) {
   return (
     <div>
-      <select onChange={props.handleChange} value={props.curValue}>
+      <select className="ctrls__item__input" onChange={props.handleChange} value={props.curValue}>
         {
           props.values.map((value) => {
             return <option key={value} value={value}>{value}</option>
@@ -37,7 +36,7 @@ function Dropdown(props) {
 function Range(props) {
   return (
     <input
-      className="slider"
+      className="ctrls__item__input"
       type="range"
       min="0.5"
       max="5"
@@ -74,6 +73,7 @@ function ControlItem(props) {
   } else if (props.type === "Slider") {
     control =
     <Range
+      className="ctrls__item__input"
       curValue={props.value}
       handleChange={props.eventHandler}
     />
@@ -88,7 +88,7 @@ function ControlItem(props) {
 
   return (
     <div className="ctrls__item">
-      <p>{props.label}: </p>
+      <span>{props.label}: </span>
       {control}
     </div>
   )
@@ -302,6 +302,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+        <h1>ReactJs <span className="life-orange">Game</span> of <span className="life-red">Life</span></h1>
         <div className="ctrls">
           <div className="ctrls__left">
             <StateButtons

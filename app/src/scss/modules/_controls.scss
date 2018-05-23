@@ -3,58 +3,60 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: $board-base-color;
+  border: 3px solid $board-light-border;
+  border-radius: 10px;
 
-  &--medium {
-    width: 450px;
+  background-color: $base-color;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+
+  &__left {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
   }
 
-  &--large {
-    width: 600px;
+  &__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-}
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
 
-.ctrls__left {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+    color: $font-color;
+    background-color: $ctrls-color;
 
-.ctrls__right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.ctrls__item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ctrls__label {
-  width: 120px;
-
-  margin: 0px;
-
-  font-size: 1.2em;
-  text-align: center;
-  color: $font-color;
+    &__input {
+      width: 100px;
+      margin: 0px;
+      margin-left: 10px;
+    }
+  }
 }
 
 .generations-display {
   border-spacing: 0;
+  border-radius: 10px;
+  padding: 10px;
 
   font-size: 1.2em;
   text-align: center;
   color: $font-color;
-  background-color: darken($board-base-color, 30);
+  background-color: $ctrls-color;
 
   & td, & th {
     padding: 5px;
-    border: 1px solid red;
+    border: 1px solid $life-red-color;
+    border-radius: 5px;
   }
 }

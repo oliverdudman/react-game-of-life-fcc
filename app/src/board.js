@@ -34,7 +34,7 @@ class Board extends React.Component {
   drawSquare(i, j, ctx, cellValue) {
     let positionX = i * (this.cellTotal);
     let positionY = j * (this.cellTotal);
-    let cellColor = cellValue === 1 ? "orange" : "red";
+    let cellColor = cellValue === 1 ? "#ED8554" : "#ff1e39";
     ctx.fillStyle = cellColor;
     ctx.fillRect(positionX, positionY, this.cellSize, this.cellSize);
   }

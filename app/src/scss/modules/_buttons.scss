@@ -1,27 +1,15 @@
 .btn {
   font-size: 2em;
-  color: darken($board-base-color, 30);
+  color: $ctrls-color;
   background-color: transparent;
   border:none;
-
-  &--large {
-    width: 150px;
-  }
-
-  &--medium {
-    width: 100px;
-  }
-
-  &.active, &:active {
-    // background-color: darken($board-base-color, 10);
-  }
 
   &:hover {
     cursor: pointer;
   }
 
   &--disabled {
-    color: darken($board-base-color, 10);
+    color: $ctrls-disabled-color;
 
     &:hover {
       cursor: default;

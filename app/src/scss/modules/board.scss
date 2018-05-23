@@ -1,38 +1,11 @@
 .board {
   padding: 2px;
-  background-color: $board-base-color;
+  margin-top: 40px;
+  border: 3px solid $board-dark-border;
+  border-radius: 6px;
 
-  &--small {
-    width: $board-width-small;
-  }
+  background-color: $board-dead-cells-color;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
 
-  &--medium {
-    width: $board-width-medium;
-  }
 
-  &--large {
-    width: $board-width-large;
-  }
-
-  &__cell {
-    display: inline-block;
-    width: $cell-size;
-    height: $cell-size;
-    background-color: black;
-    margin: $cell-margin;
-
-    &.active {
-      background-color: orange;
-    }
-
-    &.active--old {
-      background-color: red;
-    }
-  }
-
-  &__row {
-    height: $cell-size + 2 * $cell-margin;
-    padding: 0px;
-    margin: 0px;
-  }
 }
