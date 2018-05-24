@@ -301,7 +301,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="game-container">
         <h1>ReactJs <span className="life-orange">Game</span> of <span className="life-red">Life</span></h1>
         <div className="ctrls">
           <div className="ctrls__left">
@@ -341,6 +341,19 @@ class App extends Component {
           activeCells={this.state.activeCells}
           handleCellClick={this.handleCellClick}
         />
+        <footer className="footer">
+          <p>
+            <a href="https://github.com/oliverdudman" target="_blank">
+              <i class="fab fa-github" aria-hidden="true"></i>
+            </a>
+            <a href="https://codepen.io/oliverdudman/" target="_blank">
+              <i class="fab fa-codepen" aria-hidden="true"> </i>
+            </a>
+            <a href="https://www.freecodecamp.com/oliverdudman" target="_blank">
+              <i class="fab fa-free-code-camp" aria-hidden="true"></i>
+            </a>
+          </p>
+        </footer>
       </div>
     );
   }

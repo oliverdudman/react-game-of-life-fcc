@@ -15,7 +15,7 @@
    background-color: darken($base-color, 25);
  }
 
- .container {
+ .game-container {
    position: absolute;
    top: 15%;
    left: 50%;
@@ -38,4 +38,24 @@
 
  .life-orange {
    color: $life-orange-color;
+ }
+
+ .footer {
+   position: fixed;
+   bottom: -100px;
+
+   width: 100%;
+
+   color: $font-color;
+   text-align: center;
+   font-size: 2em;
+   letter-spacing: 0.25em;
+
+   & a {
+     color: $font-color;
+   }
+
+   & a:hover {
+     color: darken($font-color, 20);
+   }
  }
