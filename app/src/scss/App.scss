@@ -4,6 +4,15 @@
         "modules/_controls",
         "modules/board";
 
+html, body {
+  
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+
+  background-color: darken($base-color, 25);
+}
+
  h1{
     margin-top: 0px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -12,7 +21,6 @@
 
  #root {
    height: 100%;
-   background-color: darken($base-color, 25);
  }
 
  .game-container {
