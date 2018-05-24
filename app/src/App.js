@@ -343,14 +343,14 @@ class App extends Component {
         />
         <footer className="footer">
           <p>
-            <a href="https://github.com/oliverdudman" target="_blank">
-              <i class="fab fa-github" aria-hidden="true"></i>
+            <a href="https://github.com/oliverdudman" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-github" aria-hidden="true"></i>
             </a>
-            <a href="https://codepen.io/oliverdudman/" target="_blank">
-              <i class="fab fa-codepen" aria-hidden="true"> </i>
+            <a href="https://codepen.io/oliverdudman/" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-codepen" aria-hidden="true"> </i>
             </a>
-            <a href="https://www.freecodecamp.com/oliverdudman" target="_blank">
-              <i class="fab fa-free-code-camp" aria-hidden="true"></i>
+            <a href="https://www.freecodecamp.com/oliverdudman" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-free-code-camp" aria-hidden="true"></i>
             </a>
           </p>
         </footer>
