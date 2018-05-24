@@ -97,9 +97,11 @@ class App extends Component {
     super(props);
 
     this.BOARDSIZES = {
-      Small: {w: 50, h: 30, text: "Small"},
-      Medium: {w: 70, h: 50, text: "Medium"},
-      Large: {w: 100, h: 80, text: "Large"}
+      "Extra Small": {w: 30, h: 20},
+      Small: {w: 50, h: 30},
+      Medium: {w: 70, h: 50},
+      Large: {w: 90, h: 70},
+      "Extra Large": {w: 110, h:90}
     };
 
     this.PRESETS = {
