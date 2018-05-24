@@ -5,7 +5,7 @@
         "modules/board";
 
 html, body {
-  
+
   margin: 0;
   padding: 0;
   font-family: sans-serif;
@@ -49,7 +49,7 @@ html, body {
  }
 
  .footer {
-   position: fixed;
+   position: absolute;
    bottom: -100px;
 
    width: 100%;
