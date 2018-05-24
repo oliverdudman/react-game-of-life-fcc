@@ -3,67 +3,6 @@ import Board from './board';
 
 import './scss/App.scss';
 
-
-function StateButtons(props) {
-  let playPause = props.runStatus ? "fas fa-pause" : "fas fa-play";
-  let disabledBtnCss = props.runStatus ? "btn btn--disabled" : "btn"
-  return (
-    <div>
-      <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
-      <button onClick={props.handleStep} type="button" className={disabledBtnCss} disabled={props.runStatus}>
-        <i className="fas fa-step-forward"></i>
-      </button>
-      <button onClick={props.handleReset} type="button" className="btn"><i className="fas fa-sync-alt"></i></button>
-    </div>
-
-  )
-}
-
-function Dropdown(props) {
-  return (
-    <div>
-      <select className="ctrls__item__input" onChange={props.handleChange} value={props.curValue}>
-        {
-          props.values.map((value) => {
-            return <option key={value} value={value}>{value}</option>
-          })
-        }
-      </select>
-    </div>
-  )
-}
-
-function Range(props) {
-  return (
-    <input
-      className="ctrls__item__input"
-      type="range"
-      min="0.5"
-      max="5"
-      step="0.1"
-      value={Math.log(2000 / props.curValue)}
-      onChange={props.handleChange}
-    />
-  )
-}
-
-function Generations(props) {
-  return (
-    <table className="generations-display">
-      <thead>
-        <tr>
-          <th>Generations</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{props.generations}</td>
-        </tr>
-      </tbody>
-    </table>
-  )
-}
-
 function ControlItem(props) {
   let control;
 
@@ -92,7 +31,65 @@ function ControlItem(props) {
       {control}
     </div>
   )
+}
 
+function Dropdown(props) {
+  return (
+    <div>
+      <select className="ctrls__item__input" onChange={props.handleChange} value={props.curValue}>
+        {
+          props.values.map((value) => {
+            return <option key={value} value={value}>{value}</option>
+          })
+        }
+      </select>
+    </div>
+  )
+}
+
+function Generations(props) {
+  return (
+    <table className="generations-display">
+      <thead>
+        <tr>
+          <th>Generations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{props.generations}</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
+
+function Range(props) {
+  return (
+    <input
+      className="ctrls__item__input"
+      type="range"
+      min="0.5"
+      max="5"
+      step="0.1"
+      value={Math.log(2000 / props.curValue)}
+      onChange={props.handleChange}
+    />
+  )
+}
+
+function StateButtons(props) {
+  let playPause = props.runStatus ? "fas fa-pause" : "fas fa-play";
+  let disabledBtnCss = props.runStatus ? "btn btn--disabled" : "btn"
+  return (
+    <div>
+      <button onClick={props.handleStartStop} type="button" className="btn"><i className={playPause}></i></button>
+      <button onClick={props.handleStep} type="button" className={disabledBtnCss} disabled={props.runStatus}>
+        <i className="fas fa-step-forward"></i>
+      </button>
+      <button onClick={props.handleReset} type="button" className="btn"><i className="fas fa-sync-alt"></i></button>
+    </div>
+  )
 }
 
 class App extends Component {
@@ -274,16 +271,15 @@ class App extends Component {
       currentPattern: "Random"
     };
 
+    this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleCellClick = this.handleCellClick.bind(this);
+    this.handleChangePattern = this.handleChangePattern.bind(this);
     this.handleChangeSize = this.handleChangeSize.bind(this);
     this.handleChangeSpeed = this.handleChangeSpeed.bind(this);
-    this.runLifecycle = this.runLifecycle.bind(this);
-    this.calculateCellStatus = this.calculateCellStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
-    this.handleChangePattern = this.handleChangePattern.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleStep = this.handleStep.bind(this);
-
+    this.runLifecycle = this.runLifecycle.bind(this);
   }
 
   componentDidMount() {
@@ -292,46 +288,6 @@ class App extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.runInterval);
-  }
-
-  runLifecycle(speed, runOnce) {
-    var that = this;
-
-    if (checkCells(that.state.activeCells)) {
-      this.setState({runStatus: true});
-      clearTimeout(that.runInterval);
-      lifeCycle();// start running cycle
-    }
-
-    function lifeCycle() {
-      let activeCells = that.calculateCellStatus(that.state.activeCells, that.BOARDSIZES[that.state.size].h, that.BOARDSIZES[that.state.size].w);
-      let generations = that.state.generations;
-
-      // continue lifeCycle if there are still active cells
-      if (checkCells(activeCells) && !runOnce) {
-        that.runInterval = setTimeout(lifeCycle, that.state.curSpeed);
-      } else {
-        that.setState({runStatus: false});
-      }
-
-      generations++;
-      that.setState({activeCells: activeCells, generations: generations});
-
-    }
-
-    function checkCells(cells) {
-      /*
-      checks input to find active cells-
-        return values:
-          true if there are active cells
-          false if 0 active cells
-       */
-      return cells.findIndex(function(element) {
-        let inner = element.findIndex((elementInner) => elementInner > 0);
-        return inner !== -1;
-      }) !== -1;
-    }
-
   }
 
   calculateCellStatus(prevCells, height, width) {
@@ -430,6 +386,46 @@ class App extends Component {
     if (!this.state.runStatus) {
       this.runLifecycle(this.state.curSpeed, true);
     }
+  }
+
+  runLifecycle(speed, runOnce) {
+    var that = this;
+
+    if (checkCells(that.state.activeCells)) {
+      this.setState({runStatus: true});
+      clearTimeout(that.runInterval);
+      lifeCycle();// start running cycle
+    }
+
+    function lifeCycle() {
+      let activeCells = that.calculateCellStatus(that.state.activeCells, that.BOARDSIZES[that.state.size].h, that.BOARDSIZES[that.state.size].w);
+      let generations = that.state.generations;
+
+      // continue lifeCycle if there are still active cells
+      if (checkCells(activeCells) && !runOnce) {
+        that.runInterval = setTimeout(lifeCycle, that.state.curSpeed);
+      } else {
+        that.setState({runStatus: false});
+      }
+
+      generations++;
+      that.setState({activeCells: activeCells, generations: generations});
+
+    }
+
+    function checkCells(cells) {
+      /*
+      checks input to find active cells-
+        return values:
+          true if there are active cells
+          false if 0 active cells
+       */
+      return cells.findIndex(function(element) {
+        let inner = element.findIndex((elementInner) => elementInner > 0);
+        return inner !== -1;
+      }) !== -1;
+    }
+
   }
 
   render() {
