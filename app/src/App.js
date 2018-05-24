@@ -109,6 +109,56 @@ class App extends Component {
       Clear: function(size) {
         return Array(size.h).fill().map(() => Array(size.w).fill(0));
       },
+      Random: function(size) {
+        let result = this.Clear(size);
+        let numActive = Math.floor(Math.random() * size.h * size.w / 2);
+        let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * size.w));
+        let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * size.h));
+        for (let i = 0; i < numActive; i++) {
+          result[rows[i]][columns[i]] = 1;
+        }
+
+        return result;
+      },
+      Beacon: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid - 1] = 1;
+        result[jMid - 1][iMid] = 1;
+        result[jMid][iMid - 1] = 1;
+        result[jMid + 1][iMid + 2] = 1;
+        result[jMid + 2][iMid + 1] = 1;
+        result[jMid + 2][iMid + 2] = 1;
+
+        return result;
+      },
+      Beehive: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid - 1] = 1;
+        result[jMid - 1][iMid] = 1;
+        result[jMid][iMid - 2] = 1;
+        result[jMid][iMid + 1] = 1;
+        result[jMid + 1][iMid - 1] = 1;
+        result[jMid + 1][iMid] = 1;
+
+        return result;
+      },
+      Blinker: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid][iMid - 1] = 1;
+        result[jMid][iMid] = 1;
+        result[jMid][iMid + 1] = 1;
+
+        return result;
+      },
       Block: function(size) {
         let result = this.Clear(size);
         let iMid = size.w / 2;
@@ -118,18 +168,101 @@ class App extends Component {
         result[jMid][iMid + 1] = 1;
         result[jMid + 1][iMid] = 1;
         result[jMid + 1][iMid + 1] = 1;
+
         return result;
       },
-      Random: function(size) {
+      Boat: function (size) {
         let result = this.Clear(size);
-        let numActive = Math.floor(Math.random() * size.h * size.w / 2);
-        let columns = Array(numActive).fill().map(() => Math.floor(Math.random() * size.w));
-        let rows = Array(numActive).fill().map(() => Math.floor(Math.random() * size.h));
-        for (let i = 0; i < numActive; i++) {
-          result[rows[i]][columns[i]] = 1;
-        }
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid - 1] = 1;
+        result[jMid - 1][iMid] = 1;
+        result[jMid][iMid - 1] = 1;
+        result[jMid][iMid + 1] = 1;
+        result[jMid + 1][iMid] = 1;
+
         return result;
-      }
+      },
+      Exploder: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 2][iMid - 2] = 1;
+        result[jMid - 2][iMid] = 1;
+        result[jMid - 2][iMid + 2] = 1;
+        result[jMid - 1][iMid - 2] = 1;
+        result[jMid - 1][iMid + 2] = 1;
+        result[jMid][iMid - 2] = 1;
+        result[jMid][iMid + 2] = 1;
+        result[jMid + 1][iMid - 2] = 1;
+        result[jMid + 1][iMid + 2] = 1;
+        result[jMid + 2][iMid - 2] = 1;
+        result[jMid + 2][iMid] = 1;
+        result[jMid + 2][iMid + 2] = 1;
+
+        return result;
+      },
+      Glider: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid] = 1;
+        result[jMid][iMid + 1] = 1;
+        result[jMid + 1][iMid - 1] = 1;
+        result[jMid + 1][iMid] = 1;
+        result[jMid + 1][iMid + 1] = 1;
+
+        return result;
+      },
+      "Lightwight Spaceship": function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid - 1] = 1;
+        result[jMid - 1][iMid] = 1;
+        result[jMid - 1][iMid + 1] = 1;
+        result[jMid - 1][iMid + 2] = 1;
+        result[jMid][iMid - 2] = 1;
+        result[jMid][iMid + 2] = 1;
+        result[jMid + 1][iMid + 2] = 1;
+        result[jMid + 2][iMid - 2] = 1;
+        result[jMid + 2][iMid + 1] = 1;
+
+        return result;
+      },
+      Loaf: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 2][iMid - 1] = 1;
+        result[jMid - 2][iMid] = 1;
+        result[jMid - 1][iMid - 2] = 1;
+        result[jMid - 1][iMid + 1] = 1;
+        result[jMid][iMid - 1] = 1;
+        result[jMid][iMid + 1] = 1;
+        result[jMid + 1][iMid] = 1;
+
+        return result;
+      },
+      Toad: function(size) {
+        let result = this.Clear(size);
+        let iMid = size.w / 2;
+        let jMid = size.h / 2;
+
+        result[jMid - 1][iMid] = 1;
+        result[jMid - 1][iMid + 1] = 1;
+        result[jMid - 1][iMid + 2] = 1;
+        result[jMid][iMid - 1] = 1;
+        result[jMid][iMid] = 1;
+        result[jMid][iMid + 1] = 1;
+
+        return result;
+      },
     }
 
     this.state = {
