@@ -1,0 +1,46 @@
+.help {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  margin: 20px;
+  color: $font-color;
+
+  &__icon {
+    font-size: 1.3em;
+    text-align: right;
+    cursor: pointer;
+  }
+
+  &__content {
+    max-height: 0px;
+    overflow: hidden;
+    border-radius: 15px;
+
+    text-align: center;
+    background-color: rgba(0,0,0,0.8);
+
+    transition: 0.4s;
+
+    &--active {
+      max-height: 550px;
+    }
+
+    & p {
+      padding: 0px 40px;
+    }
+
+    & a {
+      color: $font-color;
+    }
+
+    & ul {
+      display: inline-block;
+      text-align: left;
+    }
+
+    & h2 {
+      text-decoration: underline;
+    }
+  }
+}

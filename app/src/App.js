@@ -64,6 +64,63 @@ function Generations(props) {
   )
 }
 
+class Help extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      show: false
+    }
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    console.log("clicked");
+    this.setState((prevState, props) => {
+      return {show: !prevState.show};
+    });
+  }
+
+  render() {
+    console.log(this.state.show);
+    let iconClass = this.state.show ? "fas fa-times" : "fas fa-question";
+    let contentClass = this.state.show ? "help__content help__content--active" : "help__content";
+    return (
+      <div className="help">
+        <div className="help__icon"><i className={iconClass} onClick={this.handleClick}></i></div>
+        <div className={contentClass}>
+          <h2>About the Game of life</h2>
+          <p>
+            The Game of Life was invented by the mathematician <a href="https://en.wikipedia.org/wiki/John_Horton_Conway" target="_blank" rel="noopener noreferrer">John Conway</a> in 1970.
+            The game has no players and is run based on the following rules:
+          </p>
+          <ul>
+            <li>A live cell with less than two live neighbours will die.</li>
+            <li>A live cell with two or three live neighbours will remain alive</li>
+            <li>A live cell with four or more neighbours will die.</li>
+            <li>A dead cell with three neighbours will become alive</li>
+          </ul>
+          <p>You can find out more about the Game of Life <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener noreferrer">here</a>.</p>
+          <h2>Instructions</h2>
+          <p>Select the size of board and preset you desire. Click the play icon to run the simulation.
+            The simulation can be paused by pressing the pause icon. When paused, you can run one generation of the simulation
+            by pressing the step forward icon. Speed can adjusted using the speed slider.
+          </p>
+          <p>
+            Oranges cells are younger and red cells are older.
+          </p>
+          <h2>About this page</h2>
+          <p>
+            This page was coded by <a href="https://oliverdudman.surge.sh" target="_blank" rel="noopener noreferrer">Oliver Dudman</a> as
+            a project for <a href="https://freecodecamp.com" target="_blank" rel="noopener noreferrer">freeCodeCamp</a>.
+          </p>
+        </div>
+      </div>
+    )
+  }
+}
+
 function Range(props) {
   return (
     <input
@@ -433,6 +490,7 @@ class App extends Component {
   render() {
     return (
       <div className="game-container">
+        <Help />
         <h1>ReactJs <span className="life-orange">Game</span> of <span className="life-red">Life</span></h1>
         <div className="ctrls">
           <div className="ctrls__left">
