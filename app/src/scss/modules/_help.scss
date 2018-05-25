@@ -32,6 +32,10 @@
 
     & a {
       color: $font-color;
+
+      &:hover {
+        color: darken($font-color, 20);
+      }
     }
 
     & ul {
